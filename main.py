@@ -27,7 +27,6 @@ def main():
 
     thread = threading.Thread(target=run_translation, args=(ui,), daemon=True)
     thread.start()
-
     ui.start()
 
 if __name__ == "__main__":

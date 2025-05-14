@@ -12,7 +12,7 @@ from websockets.exceptions import ConnectionClosedOK
 from ui import TranscriptionWindow
 
 GLADIA_API_URL = "https://api.gladia.io"
-GLADIA_API_KEY = "use your own key"
+GLADIA_API_KEY = ""
 
 class InitiateResponse(TypedDict):
     id: str
@@ -35,7 +35,10 @@ STREAMING_CONFIGURATION: StreamingConfiguration = {
     "bit_depth": 16,
     "sample_rate": 16000,
     "channels": 1,
-    "language_config": {"languages": [], "code_switching": True},
+    "language_config": {
+        "languages": ["ru", "ro"],
+        "code_switching": True
+    },
     "realtime_processing": {
         "translation": True,
         "translation_config": {"target_languages": ["en"]},
@@ -95,6 +98,8 @@ async def translation_loop(ui: TranscriptionWindow):
     session = init_live_session()
     async with connect(session["url"]) as ws:
         sender = asyncio.create_task(send_audio(ws))
+
+        print("Strated!")
 
         async for msg in ws:
             data = json.loads(msg)
