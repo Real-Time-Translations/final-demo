@@ -1,3 +1,4 @@
+# pizdos :-0
 import tkinter as tk
 from collections import deque
 import asyncio
