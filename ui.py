@@ -31,23 +31,27 @@ class TranscriptionWindow:
         self.text_widget.pack(pady=10)
         self.text_widget.config(state=tk.DISABLED)
 
+        self.controls = tk.Frame(self.root)
+        self.controls.pack(pady=5)
+
         self.dropdown = ttk.Combobox(
-            self.root,
+            self.controls,
             font=("Courier", 20),
             textvariable=self.selected_lang,
             values=self.langs,
-            state="readonly"
+            state="readonly",
+            width=20
         )
+        self.dropdown.pack(side=tk.LEFT, padx=20)
 
-        self.dropdown.pack(pady=5)
         self.button = tk.Button(
-            self.root,
+            self.controls,
             text="Start",
             command=self.on_click,
             font=("Courier", 20),
+            width=10
         )
-
-        self.button.pack(pady=5)
+        self.button.pack(side=tk.RIGHT, padx=20)
 
     def on_click(self):
         if not self.started:

@@ -9,7 +9,7 @@ def test_printing(ui):
     i = 0
     while True:
         time.sleep(0.1)
-        ui.root.after(0, ui.append, f"Test {i}")
+        ui.root.after(0, ui.append, f"[{ui.selected_lang.get()}] Test {i}")
         i += 1
 
 def run_translation(ui: TranscriptionWindow):
