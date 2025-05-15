@@ -32,7 +32,7 @@ def run_translation(ui: TranscriptionWindow):
         pass
 
 def main():
-    ui = TranscriptionWindow(run_translation)
+    ui = TranscriptionWindow(test_printing)
     ui.start()
 
 if __name__ == "__main__":
