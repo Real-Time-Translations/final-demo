@@ -12,7 +12,7 @@ from websockets.exceptions import ConnectionClosedOK
 from ui import TranscriptionWindow
 
 GLADIA_API_URL = "https://api.gladia.io"
-GLADIA_API_KEY = ""
+GLADIA_API_KEY = "ea353dde-e47d-4f44-9b81-b73f371693a4"
 
 class InitiateResponse(TypedDict):
     id: str
@@ -30,21 +30,6 @@ class StreamingConfiguration(TypedDict):
     language_config: LanguageConfiguration | None
     realtime_processing: dict
 
-STREAMING_CONFIGURATION: StreamingConfiguration = {
-    "encoding": "wav/pcm",
-    "bit_depth": 16,
-    "sample_rate": 16000,
-    "channels": 1,
-    "language_config": {
-        "languages": ["ru", "ro"],
-        "code_switching": True
-    },
-    "realtime_processing": {
-        "translation": True,
-        "translation_config": {"target_languages": ["en"]},
-    },
-}
-
 FFMPEG_CMD = [
     "ffmpeg", "-loglevel", "error",
     "-f", "pulse",
@@ -56,13 +41,35 @@ FFMPEG_CMD = [
 def get_gladia_key() -> str:
     return GLADIA_API_KEY
 
-def init_live_session() -> InitiateResponse:
+def get_streaming_config(ui: TranscriptionWindow):
+    languages_map = {"Russian": "ru", "Romanian": "ro", "English": "en"}
+    target = languages_map[ui.selected_lang.get()]
+
+    return {
+        "encoding": "wav/pcm",
+        "bit_depth": 16,
+        "sample_rate": 16000,
+        "channels": 1,
+        "language_config": {
+            "languages": ["ru", "ro", "en"],
+            "code_switching": True
+        },
+        "realtime_processing": {
+            "translation": True,
+            "translation_config": {
+                "target_languages": [target]
+            },
+        },
+    }
+
+def init_live_session(ui: TranscriptionWindow) -> InitiateResponse:
     r = requests.post(
         f"{GLADIA_API_URL}/v2/live",
         headers={"X-Gladia-Key": get_gladia_key()},
-        json=STREAMING_CONFIGURATION,
+        json=get_streaming_config(ui),
         timeout=3,
     )
+
     if not r.ok:
         print(f"{r.status_code}: {r.text or r.reason}", file=sys.stderr)
         sys.exit(r.status_code)
@@ -95,11 +102,9 @@ def fmt_ts(s: float) -> str:
     return f"{h:02}:{m:02}:{sec:02}.{ms:03}"
 
 async def translation_loop(ui: TranscriptionWindow):
-    session = init_live_session()
+    session = init_live_session(ui)
     async with connect(session["url"]) as ws:
         sender = asyncio.create_task(send_audio(ws))
-
-        print("Strated!")
 
         async for msg in ws:
             data = json.loads(msg)
