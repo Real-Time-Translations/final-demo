@@ -1,12 +1,11 @@
 import asyncio
 import base64
 import json
-import signal
 import sys
 from typing import Literal, TypedDict
 
 import requests
-from websockets.asyncio.client import ClientConnection, connect
+from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosedOK
 
 from ui import TranscriptionWindow

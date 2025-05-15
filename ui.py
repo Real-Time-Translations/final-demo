@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from collections import deque
-import asyncio
 import threading
-import random
 
 class TranscriptionWindow:
     def __init__(self, printing_function, max_lines=10):

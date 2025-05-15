@@ -1,16 +1,4 @@
-import tkinter as tk
-from collections import deque
 import asyncio
-import threading
-import signal
-import sys
-import base64
-import json
-import subprocess
-import requests
-from websockets.asyncio.client import connect
-from websockets.exceptions import ConnectionClosedOK
-from typing import TypedDict, Literal
 
 from ui import TranscriptionWindow
 from rt_translate import translation_loop
