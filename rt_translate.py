@@ -12,7 +12,7 @@ from websockets.exceptions import ConnectionClosedOK
 from ui import TranscriptionWindow
 
 GLADIA_API_URL = "https://api.gladia.io"
-GLADIA_API_KEY = "ea353dde-e47d-4f44-9b81-b73f371693a4"
+GLADIA_API_KEY = ""
 
 class InitiateResponse(TypedDict):
     id: str
